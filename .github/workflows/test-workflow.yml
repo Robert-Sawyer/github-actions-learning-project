@@ -2,7 +2,18 @@ name: Activity types test workflow
 on:
   pull_request:
     types: [opened, edited]
+    branches:
+      - master
+      - 'dev-*' # dev-new dev-this-is-new
+      - 'feature/**' # feature/new feature/new/button
   workflow_dispatch:
+  push:
+    branches:
+      - master
+      - 'dev-*'
+      - 'feature/**'
+    paths-ignore:
+      - '.github/workflows/*'
 
 jobs:
   deploy:
