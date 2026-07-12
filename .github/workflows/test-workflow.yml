@@ -1,5 +1,8 @@
-name: Lint, test and deploy
-on: push
+name: Activity types test workflow
+on:
+  pull_request:
+    types: [opened, edited]
+  workflow_dispatch:
 
 jobs:
   deploy:
