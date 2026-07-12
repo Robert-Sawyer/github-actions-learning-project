@@ -1,0 +1,31 @@
+name: Lint, test and deploy
+on: push
+
+jobs:
+  lint:
+    runs-on: windows-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v7
+      - name: Install Node JS
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install deps
+        run: npm ci
+      - name: Lint
+        run: npm lint
+  test:
+    needs: lint
+    runs-on: windows-latest
+    steps:
+      - name: Run Tests
+        run: npm test
+  deploy:
+    needs: [lint, test]
+    runs-on: windows-latest
+    steps:
+      - name: Build project
+        run: npm build
+      - name: Deploy
+        run: echo "Deploying..."
