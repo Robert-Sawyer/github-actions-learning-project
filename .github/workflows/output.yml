@@ -1,5 +1,5 @@
-name: Output imformation
-on: workflow_dispatch
+name: Output information
+on: issues
 
 jobs:
   info:
@@ -7,5 +7,5 @@ jobs:
     steps:
       - name: Output GitHub context
         env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
+          GITHUB_CONTEXT: ${{ toJSON(github.event) }}
         run: echo "$env:GITHUB_CONTEXT"
