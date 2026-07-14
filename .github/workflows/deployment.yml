@@ -1,33 +1,38 @@
-name: Test Project
-on: workflow_dispatch
-
+name: Deploy website
+on:
+  push:
+    branches:
+      - master
 jobs:
   test:
     runs-on: windows-latest
     steps:
       - name: Get code
-        uses: actions/checkout@v7
-      - name: Install Node JS
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-      - name: Install deps
+        uses: actions/checkout@v3
+      - name: Install dependencies
         run: npm ci
-      - name: Run Tests
-        run: npm test
-  deploy:
+      - name: Lint code
+        run: npm run lint
+      - name: Test code
+        run: npm run test
+  build:
     needs: test
     runs-on: windows-latest
     steps:
       - name: Get code
-        uses: actions/checkout@v7
-      - name: Install Node JS
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-      - name: Install deps
+        uses: actions/checkout@v3
+      - name: Install dependencies
         run: npm ci
-      - name: Build project
+      - name: Build website
         run: npm run build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-files
+          path: dist
+  deploy:
+    needs: build
+    runs-on: windows-latest
+    steps:
       - name: Deploy
         run: echo "Deploying..."
